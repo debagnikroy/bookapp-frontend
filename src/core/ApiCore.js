@@ -35,3 +35,19 @@ export const getBookDetails2 = (isbn) => {
 		json : true
 	});
 };
+
+export const getTransferMarketListedBooks = (userId,token) => {    
+    return fetch(`http://localhost:8001/api/getTransferMarketListedBooks/${userId}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};

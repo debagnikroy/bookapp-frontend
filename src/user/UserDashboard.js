@@ -3,6 +3,7 @@ import Layout from '../core/Layout';
 import {isAuthenticated} from '../auth'
 import { Link } from 'react-router-dom';
 import {getPurchaseHistory,getCurrentBooks, getListedBooks} from './ApiUser';
+import Menu from '../core/Menu';
 import MyCard from '../core/MyCard';
 
 const Dashboard=()=>{
@@ -14,11 +15,14 @@ const Dashboard=()=>{
     const token=isAuthenticated().token;   
 
     const init=(userId,token)=>{
+        /*setCurrentBooks([]);
+        setListedBooks([]);*/
         getCurrentBooks(userId,token).then(data=>{
             if(data.error){
                 console.log(data.error);
             }
             else{
+                console.log("latest",data[0].currentBooks);
                 setCurrentBooks(data[0].currentBooks);
             }
         })
@@ -31,6 +35,7 @@ const Dashboard=()=>{
                 console.log(data.error);
             }
             else{
+                console.log("latest listedBooks",data[0].listedBooks);
                 setListedBooks(data[0].listedBooks);
             }
         })
@@ -128,14 +133,16 @@ const Dashboard=()=>{
     const userId=isAuthenticated() && isAuthenticated().user._id;
 
     return (
-        <Layout title="DashBoard" description="User Dashboard" className="container">    
+        <React.Fragment>
+            <Menu />
+            <Layout title="DashBoard" description="User Dashboard" className="container">    
 
             <h2 className="mb-4">My Books</h2>
             <div className="row">
             
                 {currentBookList.map((product,i)=>(
                     <div key={i} className="col-12 mb-3">
-                    <MyCard  product={product} viewProduct={true} listButton={true} run={run} runSetter={setRun}/>
+                    <MyCard  product={product} viewProduct={true} unlistButton={false} showDeleteButton={true} listButton={true} run={run} runSetter={setRun}/>
                     </div>
                 ))}
                 
@@ -146,12 +153,14 @@ const Dashboard=()=>{
             
                 {listedBooks.map((product,i)=>(
                     <div key={i} className="col-12 mb-3">
-                    <MyCard  product={product} viewProduct={true} />
+                    <MyCard  product={product} viewProduct={true} unlistButton={true} run={run} runSetter={setRun}/>
                     </div>
                 ))}
                 
             </div>
         </Layout>
+        </React.Fragment>
+        
     )  
 }
 

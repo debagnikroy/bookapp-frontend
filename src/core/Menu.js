@@ -14,43 +14,26 @@ const Menu=(props)=>{
         <div>
             <ul className="nav nav-tabs bg-primary">
                 <li className="nav-item">
-                    <Link className="nav-link" to="/" style={isActive(props.history,"/")}>Home</Link>
+                    <Link className="nav-link" to="/" style={isActive(props.history,"/")}>Dashboard</Link>
                 </li>
 
                 <li className="nav-item">
-                    <Link className="nav-link" to="/shop" style={isActive(props.history,"/shop")}>Shop</Link>
+                    <Link className="nav-link" to="/transferMarket" style={isActive(props.history,"/transferMarket")}>Transfer Market</Link>
                 </li>
                 
                 <li className="nav-item">
-                    <Link className="nav-link" to="/cart" style={isActive(props.history,"/cart")}>
-                        Cart{" "} 
-                        <sub><small className="cart-badge">{itemTotal()}</small></sub>
+                    <Link className="nav-link" to="/user/addBook" style={isActive(props.history,"/user/addBook")}>
+                        Add Book
+                        {/* <sub><small className="cart-badge">{itemTotal()}</small></sub> */}
                     </Link>
                 </li>
 
-                {isAuthenticated() && isAuthenticated().user.role===0 && (
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/user/dashboard" style={isActive(props.history,"/user/dashboard")}>Dashboard</Link>
-                    </li>
-                )}
-
-                {isAuthenticated() && isAuthenticated().user.role===1 && (
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/admin/dashboard" style={isActive(props.history,"/admin/dashboard")}>Dashboard</Link>
-                    </li>
-                )}  
-
-
-                {!isAuthenticated() && (
-                    <Fragment>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/signin" style={isActive(props.history,"/signin")}>Signin</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/signup" style={isActive(props.history,"/signup")}>Signup</Link>
-                        </li>
-                    </Fragment>
-                )}
+                <li className="nav-item">
+                    <Link className="nav-link" to="/" style={isActive(props.history,"/")}>
+                        Notification{" "} 
+                        {/* <sub><small className="cart-badge">{itemTotal()}</small></sub> */}
+                    </Link>
+                </li>
 
                 {isAuthenticated() && (
                     <li className="nav-item">

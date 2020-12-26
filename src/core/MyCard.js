@@ -3,7 +3,7 @@ import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, 
 import { getBookDetails, getDetails } from './ApiCore'
 import { Redirect } from 'react-router-dom';
 import {isAuthenticated} from '../auth'
-import { listBook } from '../user/ApiUser';
+import { listBook,unlistBook,deleteBook,borrowBook } from '../user/ApiUser';
 
 
 const MyCard = (props) => {
@@ -11,6 +11,10 @@ const MyCard = (props) => {
     let isbn={"product":props.product};
     
     let viewProduct=props.viewProduct,listButton=props.listButton,setRun=props.runSetter,run=props.run;
+    let unlistButton=props.unlistButton;
+    let showDeleteButton=props.showDeleteButton;
+    let owner=props.owner;
+    let showBorrowButton=props.showBorrowButton;
 
     const [info, setInfo] = useState({});
     const [author, setAuthor] = useState("");
@@ -20,10 +24,11 @@ const MyCard = (props) => {
 
     const {user,token}=isAuthenticated();
 
+
+    //to list a book
     const enlistBook=()=>{
-        console.log(isbn.product);
-        setRun(!run);
-        console.log("outside");
+        //console.log(isbn.product);        
+        //console.log("outside");
         listBook(user._id,isbn.product,token).then(data=>{
             if(data.error){
                 console.log(data.error);
@@ -46,6 +51,87 @@ const MyCard = (props) => {
     }
 
 
+
+    //to borrow a book
+    const borrowBookOnClickHandler=()=>{
+        //console.log(isbn.product);        
+        //console.log("outside");
+        borrowBook(user._id,isbn.product,owner,token).then(data=>{
+            if(data.error){
+                console.log(data.error);
+            }
+            else{
+                setRun(!run);
+                console.log("inside");
+            }
+        })
+    }
+
+    const BorrowButton=(showBorrowButton)=>{
+        if(showBorrowButton){
+            return(
+                <button onClick={borrowBookOnClickHandler} className="btn btn-outline-danger mt-2 ml-2 mb-2">
+                    Borrow Book
+                </button>            
+            )
+        }
+    }
+
+
+
+    //to delete a book
+    const deleteBookOnClick=()=>{        
+        deleteBook(user._id,isbn.product,token).then(data=>{
+            if(data.error){
+                console.log(data.error);
+            }
+            else{
+                setRun(!run);
+                console.log("inside");
+            }
+        })
+    }
+
+    const DeleteButton=(showDeleteButton)=>{
+        if(showDeleteButton){
+            return(
+                <button onClick={deleteBookOnClick} className="btn btn-outline-danger mt-2 ml-2 mb-2">
+                    Delete Book
+                </button>            
+            )
+        }
+    }
+    
+
+
+    //to unlist a book
+    const unlistBookHelper=()=>{
+        //console.log(isbn.product);
+        //setRun(!run);
+        console.log("outside");
+        unlistBook(user._id,isbn.product,token).then(data=>{
+            if(data.error){
+                console.log(data.error);
+            }
+            else{
+                setRun(!run);
+                console.log("inside");
+            }
+        })
+    }
+
+    const UnListButton=(unlistButton)=>{
+        if(unlistButton){
+            return(
+                <button onClick={unlistBookHelper} className="btn btn-outline-danger mt-2 ml-2 mb-2">
+                    Unlist Book
+                </button>            
+            )
+        }
+    }
+
+
+    //init function
     const init = (isbn) => {
         getBookDetails(isbn).then(data => {
             if (data.error) {
@@ -55,7 +141,7 @@ const MyCard = (props) => {
                 setInfo(data);
                 console.log("data",isbn,data);
                 let item_s = data.items;
-                console.log("items",item_s);
+                //console.log("items",item_s);
                 // Volume info
                 let item = item_s[0].volumeInfo;
 
@@ -100,13 +186,13 @@ const MyCard = (props) => {
                     }                    
                 }
 
-                console.log(isbn, data);
+                //console.log(isbn, data);
             }
         })
     }
 
     useEffect(() => {
-        console.log("props",props);
+        //console.log("props",props);
         init(isbn);
     }, [run]);
 
@@ -182,20 +268,23 @@ const MyCard = (props) => {
 
     const BootCard2=()=>{
         return(
-        <div class=" card tile is-child is-3 box">
-          <div class="card-image">
-            <figure class="image is-4by3">
+        <div className=" card tile is-child is-3 box">
+          <div className="card-image">
+            <figure className="image is-4by3">
               <img src={`${imgLink}`} alt="Placeholder image" />
             </figure>
           </div>
-          <div class="card-content">
-            <p class="title is-6 has-text-primary has-text-centered is-capitalized">{title}</p>
-            <p class="title is-6 has-text-primary has-text-centered is-capitalized">{author}</p>
-            <p class="has-text-black-ter has-text-weight-normal">{desc}</p>
+          <div className="card-content">
+            <p className="title is-6 has-text-primary has-text-centered is-capitalized">{title}</p>
+            <p className="title is-6 has-text-primary has-text-centered is-capitalized">{author}</p>
+            <p className="has-text-black-ter has-text-weight-normal">{desc}</p>
           </div>
           <span>
           {showViewProduct(viewProduct)}
           {ListButton(listButton)}
+          {UnListButton(unlistButton)}
+          {DeleteButton(showDeleteButton)}
+          {BorrowButton(showBorrowButton)}
           </span>
           
         </div>)

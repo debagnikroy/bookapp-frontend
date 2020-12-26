@@ -111,8 +111,72 @@ export const listBook = (userId,isbn,token) => {
         });
 };
 
+export const unlistBook = (userId,isbn,token) => {    
+    return fetch(`http://localhost:8001/api/user/backFromListBook/${userId}/${isbn}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization : `Bearer ${token}`
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
 
 
+export const addBook = (userId,isbn,token) => {    
+    return fetch(`http://localhost:8001/api/addISBN/${userId}/${isbn}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+
+export const deleteBook = (userId,isbn,token) => {    
+    return fetch(`http://localhost:8001/api/deleteBook/${userId}/${isbn}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
+
+export const borrowBook = (userId,isbn,ownerId,token) => {    
+    return fetch(`http://localhost:8001/api/borrowRequest/${userId}/${ownerId}/${isbn}`, {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => {
+            console.log(err);
+        });
+};
 
 
 
